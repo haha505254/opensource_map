@@ -50,23 +50,54 @@ var drawControl = new L.Control.Draw({
 
 
 // 在地圖上創建按鈕的函數
-function createFetchDataButton(latLng) {
-    var fetchDataBtn = L.DomUtil.create('button', 'fetch-data-btn');
-    fetchDataBtn.innerHTML = '取得地號';
-    fetchDataBtn.style.position = 'absolute';
-    fetchDataBtn.style.zIndex = 1000;
-    fetchDataBtn.onclick = function () {
-        // 在這裡向服務器發送請求以獲取資料
-        console.log('按鈕已點擊，正在向服務器發送請求...');
-    };
+function createFetchDataButton(latLng, geojson) {
+    // 自定義按鈕圖標
+    var fetchDataBtnIcon = L.divIcon({
+        className: 'fetch-data-btn-icon',
+        html: '<button class="fetch-data-btn">獲取資料</button>'
+    });
 
+    // 創建按鈕圖標並綁定點擊事件
     var fetchDataBtnMarker = L.marker(latLng, {
-        icon: L.divIcon({
-            className: 'fetch-data-btn-marker',
-            html: fetchDataBtn.outerHTML
-        }),
+        icon: fetchDataBtnIcon,
+        draggable: false,
         zIndexOffset: 1000
     });
+
+    // 點擊按鈕時的事件處理器
+    fetchDataBtnMarker.on('click', function (e) {
+        // 這裡是你要發送 POST 請求的遠端伺服器地址
+        var url = 'https://your-remote-server.com/api/endpoint';
+        console.log(geojson)
+        // 發送 POST 請求並處理回應
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(geojson)
+        })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('伺服器錯誤，請稍後重試。');
+            }
+        })
+        .then(function (data) {
+            // 在這裡處理返回的數據，並將其顯示在頁面上
+            console.log('獲取到的資料：', data);
+            // 你可以根據需要修改以下代碼以將數據顯示在頁面的指定位置
+            var outputElement = document.getElementById('output');
+            if (outputElement) {
+                outputElement.innerHTML = JSON.stringify(data, null, 2);
+            }
+        })
+        .catch(function (error) {
+            console.error('獲取資料時出現錯誤：', error);
+        });
+    });
+
     return fetchDataBtnMarker;
 }
 
@@ -75,7 +106,8 @@ var buttonLayerMap = new Map();
 function placeButtonNearPolygon(layer) {
     var bounds = layer.getBounds();
     var buttonLatLng = bounds.getSouthEast();
-    var fetchDataBtnMarker = createFetchDataButton(buttonLatLng);
+    var geojson = layer.toGeoJSON(); // 獲取 geojson
+    var fetchDataBtnMarker = createFetchDataButton(buttonLatLng, geojson); // 傳遞 geojson
     fetchDataBtnMarker.addTo(map);
     // 將按鈕與圖層之間的對應關係儲存到 Map 物件中
     buttonLayerMap.set(layer, fetchDataBtnMarker);
