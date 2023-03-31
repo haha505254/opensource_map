@@ -47,10 +47,12 @@ var drawControl = new L.Control.Draw({
 
 
 
+
+
 // 在地圖上創建按鈕的函數
 function createFetchDataButton(latLng) {
     var fetchDataBtn = L.DomUtil.create('button', 'fetch-data-btn');
-    fetchDataBtn.innerHTML = '獲取資料';
+    fetchDataBtn.innerHTML = '取得地號';
     fetchDataBtn.style.position = 'absolute';
     fetchDataBtn.style.zIndex = 1000;
     fetchDataBtn.onclick = function () {
@@ -68,11 +70,15 @@ function createFetchDataButton(latLng) {
     return fetchDataBtnMarker;
 }
 
+var buttonLayerMap = new Map();
+
 function placeButtonNearPolygon(layer) {
     var bounds = layer.getBounds();
     var buttonLatLng = bounds.getSouthEast();
     var fetchDataBtnMarker = createFetchDataButton(buttonLatLng);
     fetchDataBtnMarker.addTo(map);
+    // 將按鈕與圖層之間的對應關係儲存到 Map 物件中
+    buttonLayerMap.set(layer, fetchDataBtnMarker);
 }
 
 // 處理繪圖完成事件
@@ -97,5 +103,19 @@ map.on(L.Draw.Event.EDITED, function (event) {
 
         // 在多邊形旁邊創建按鈕
         placeButtonNearPolygon(layer);
+    });
+});
+
+
+// 處理刪除圖層事件
+map.on(L.Draw.Event.DELETED, function (event) {
+    var layers = event.layers;
+    layers.eachLayer(function (layer) {
+        // 在這裡找到與圖層相關聯的按鈕，並將其從地圖上移除
+        var fetchDataBtnMarker = buttonLayerMap.get(layer);
+        if (fetchDataBtnMarker) {
+            map.removeLayer(fetchDataBtnMarker);
+            buttonLayerMap.delete(layer);
+        }
     });
 });
