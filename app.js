@@ -77,25 +77,25 @@ function createFetchDataButton(latLng, geojson) {
             },
             body: JSON.stringify(geojson)
         })
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('伺服器錯誤，請稍後重試。');
-            }
-        })
-        .then(function (data) {
-            // 在這裡處理返回的數據，並將其顯示在頁面上
-            console.log('獲取到的資料：', data);
-            // 你可以根據需要修改以下代碼以將數據顯示在頁面的指定位置
-            var outputElement = document.getElementById('output');
-            if (outputElement) {
-                outputElement.innerHTML = JSON.stringify(data, null, 2);
-            }
-        })
-        .catch(function (error) {
-            console.error('獲取資料時出現錯誤：', error);
-        });
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('伺服器錯誤，請稍後重試。');
+                }
+            })
+            .then(function (data) {
+                // 在這裡處理返回的數據，並將其顯示在頁面上
+                console.log('獲取到的資料：', data);
+                // 你可以根據需要修改以下代碼以將數據顯示在頁面的指定位置
+                var outputElement = document.getElementById('output');
+                if (outputElement) {
+                    outputElement.innerHTML = JSON.stringify(data, null, 2);
+                }
+            })
+            .catch(function (error) {
+                console.error('獲取資料時出現錯誤：', error);
+            });
     });
 
     return fetchDataBtnMarker;
@@ -158,3 +158,124 @@ map.on(L.Draw.Event.DELETED, function (event) {
         }
     });
 });
+
+
+
+
+
+
+
+var cityDistrictData = {
+    "台北市": {
+        "中正區": [25.032404, 121.518267],
+        "大同區": [25.063424, 121.513042],
+        "中山區": [25.069699, 121.542305],
+        "松山區": [25.059991, 121.557588],
+        "大安區": [25.026770, 121.543707],
+        "萬華區": [25.026770, 121.497985],
+        "信義區": [25.032834, 121.566688],
+        "士林區": [25.091840, 121.524207],
+        "北投區": [25.132419, 121.501182],
+        "內湖區": [25.069699, 121.588998],
+        "南港區": [25.054391, 121.606600],
+        "文山區": [24.989786, 121.570458]
+    },
+    "新北市": {
+        "板橋區": [25.011864, 121.457968],
+        "三峽區": [24.934339, 121.368905],
+        "中和區": [24.999457, 121.498480],
+        "永和區": [25.007636, 121.516306],
+        "土城區": [24.972201, 121.443348],
+        "新莊區": [25.037652, 121.432939],
+        "樹林區": [24.989786, 121.421029],
+        "鶯歌區": [24.954180, 121.353771],
+        "三重區": [25.062361, 121.490736],
+        "新店區": [24.977147, 121.541202],
+        "蘆洲區": [25.082743, 121.471633],
+        "淡水區": [25.171610, 121.446101]
+    },
+    "基隆市": {
+        "仁愛區": [25.127593, 121.741526],
+        "信義區": [25.129531, 121.769522],
+        "中正區": [25.149108, 121.783962],
+        "中山區": [25.155569, 121.729156],
+        "安樂區": [25.129834, 121.729156],
+        "暖暖區": [25.099627, 121.745861],
+        "七堵區": [25.095623, 121.696373]
+    },
+    "桃園市": {
+        "桃園區": [24.993828, 121.301680],
+        "中壢區": [24.953287, 121.225243],
+        "大溪區": [24.880727, 121.290962],
+        "楊梅區": [24.909489, 121.145862],
+        "蘆竹區": [25.047766, 121.291382],
+        "大園區": [25.063786, 121.194567],
+        "龜山區": [24.998682, 121.348877],
+        "八德區": [24.930390, 121.287063],
+        "龍潭區": [24.863840, 121.216146],
+        "平鎮區": [24.915222, 121.205671],
+        "新屋區": [24.966644, 121.047953],
+        "觀音區": [25.033409, 121.104063]
+    },
+    "新竹市": {
+        "東區": [24.804361, 120.971994],
+        "北區": [24.813529, 120.964600],
+        "香山區": [24.765556, 120.927320]
+    },
+    "新竹縣": {
+        "竹北市": [24.839233, 121.002012],
+        "竹東鎮": [24.740726, 121.091976],
+        "新埔鎮": [24.824922, 121.105458],
+        "關西鎮": [24.789423, 121.178544],
+        "湖口鄉": [24.874300, 121.044707],
+        "新豐鄉": [24.904678, 120.996954],
+        "芎林鄉": [24.774251, 121.082614],
+        "橫山鄉": [24.720960, 121.117536],
+        "北埔鄉": [24.696018, 121.052933],
+        "寶山鄉": [24.725989, 120.996954],
+        "峨眉鄉": [24.686455, 121.018692],
+        "尖石鄉": [24.590920, 121.289284]
+    },
+    "苗栗縣": {
+        "苗栗市": [24.560994, 120.820068],
+        "頭份市": [24.685573, 120.912186],
+        "竹南鎮": [24.685573, 120.877624],
+        "後龍鎮": [24.614602, 120.795003],
+        "通霄鎮": [24.491154, 120.678306],
+        "苑裡鎮": [24.441926, 120.653654],
+    }
+};
+
+var citySelect = document.getElementById('city-select');
+for (var city in cityDistrictData) {
+    var option = document.createElement('option');
+    option.value = city;
+    option.textContent = city;
+    citySelect.appendChild(option);
+}
+
+citySelect.addEventListener('change', function () {
+    var districtSelect = document.getElementById('district-select');
+    districtSelect.innerHTML = '<option value="">請選擇行政區</option>';
+    var city = citySelect.value;
+    if (city) {
+        var districts = cityDistrictData[city];
+        for (var district in districts) {
+            var option = document.createElement('option');
+            option.value = district;
+            option.textContent = district;
+            districtSelect.appendChild(option);
+        }
+    }
+});
+
+document.getElementById('district-select').addEventListener('change', function () {
+    var city = citySelect.value;
+    var district = this.value;
+    if (city && district) {
+        var latLng = cityDistrictData[city][district];
+        map.setView(latLng, 16);
+    }
+});
+
+
