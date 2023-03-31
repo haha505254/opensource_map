@@ -97,6 +97,13 @@ map.on(L.Draw.Event.CREATED, function (event) {
 map.on(L.Draw.Event.EDITED, function (event) {
     var layers = event.layers;
     layers.eachLayer(function (layer) {
+        // 移除舊的按鈕
+        var oldFetchDataBtnMarker = buttonLayerMap.get(layer);
+        if (oldFetchDataBtnMarker) {
+            map.removeLayer(oldFetchDataBtnMarker);
+            buttonLayerMap.delete(layer);
+        }
+
         // 輸出 Polygon 的 GeoJSON
         var geojson = layer.toGeoJSON();
         console.log('編輯:', JSON.stringify(geojson));
