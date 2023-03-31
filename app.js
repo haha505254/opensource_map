@@ -45,6 +45,23 @@ var drawControl = new L.Control.Draw({
     }
 }).addTo(map);
 
+
+
+// 在地圖上創建按鈕的函數
+function createFetchDataButton() {
+    var fetchDataBtn = L.DomUtil.create('button', 'fetch-data-btn');
+    fetchDataBtn.innerHTML = '獲取資料';
+    fetchDataBtn.style.position = 'absolute';
+    fetchDataBtn.style.top = '10px';
+    fetchDataBtn.style.right = '10px';
+    fetchDataBtn.style.zIndex = 1000;
+    fetchDataBtn.onclick = function () {
+        // 在這裡向服務器發送請求以獲取資料
+        console.log('按鈕已點擊，正在向服務器發送請求...');
+    };
+    return fetchDataBtn;
+}
+
 // 處理繪圖完成事件
 map.on(L.Draw.Event.CREATED, function (event) {
     var layer = event.layer;
@@ -53,8 +70,11 @@ map.on(L.Draw.Event.CREATED, function (event) {
     // 輸出polygon的geojson
     var geojson = layer.toGeoJSON();
     console.log(JSON.stringify(geojson));
-});
 
+    // 在地圖上創建按鈕
+    var fetchDataBtn = createFetchDataButton();
+    document.getElementById('map').appendChild(fetchDataBtn);
+});
 
 map.on(L.Draw.Event.EDITED, function (event) {
     var layers = event.layers;
@@ -63,5 +83,8 @@ map.on(L.Draw.Event.EDITED, function (event) {
         var geojson = layer.toGeoJSON();
         console.log('編輯:', JSON.stringify(geojson));
     });
-});
 
+    // 在地圖上創建按鈕
+    var fetchDataBtn = createFetchDataButton();
+    document.getElementById('map').appendChild(fetchDataBtn);
+});

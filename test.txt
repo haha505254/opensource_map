@@ -21,7 +21,7 @@ L.drawLocal = {
 			},
 			undo: {
 				title: 'Delete last point drawn',
-				text: '刪除上一個繪點'
+				text: 'Delete last point'
 			},
 			buttons: {
 				polyline: 'Draw a polyline',
