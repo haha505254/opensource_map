@@ -46,20 +46,26 @@ var drawControl = new L.Control.Draw({
 }).addTo(map);
 
 
-
 // 在地圖上創建按鈕的函數
-function createFetchDataButton() {
+function createFetchDataButton(position) {
     var fetchDataBtn = L.DomUtil.create('button', 'fetch-data-btn');
     fetchDataBtn.innerHTML = '獲取資料';
     fetchDataBtn.style.position = 'absolute';
-    fetchDataBtn.style.top = '10px';
-    fetchDataBtn.style.right = '10px';
     fetchDataBtn.style.zIndex = 1000;
-    fetchDataBtn.onclick = function () {
+    L.DomEvent.on(fetchDataBtn, 'click', function () {
         // 在這裡向服務器發送請求以獲取資料
         console.log('按鈕已點擊，正在向服務器發送請求...');
-    };
+    });
+    map.getContainer().appendChild(fetchDataBtn);
+    L.DomEvent.disableClickPropagation(fetchDataBtn);
     return fetchDataBtn;
+}
+
+function placeButtonNearPolygon(layer) {
+    var bounds = layer.getBounds();
+    var buttonPosition = map.latLngToContainerPoint(bounds.getSouthEast()).add([10, -10]);
+    var fetchDataBtn = createFetchDataButton(buttonPosition);
+    fetchDataBtn.style.transform = `translate(${buttonPosition.x}px, ${buttonPosition.y}px)`;
 }
 
 // 處理繪圖完成事件
@@ -71,9 +77,8 @@ map.on(L.Draw.Event.CREATED, function (event) {
     var geojson = layer.toGeoJSON();
     console.log(JSON.stringify(geojson));
 
-    // 在地圖上創建按鈕
-    var fetchDataBtn = createFetchDataButton();
-    document.getElementById('map').appendChild(fetchDataBtn);
+    // 在多邊形旁邊創建按鈕
+    placeButtonNearPolygon(layer);
 });
 
 map.on(L.Draw.Event.EDITED, function (event) {
@@ -82,9 +87,8 @@ map.on(L.Draw.Event.EDITED, function (event) {
         // 輸出 Polygon 的 GeoJSON
         var geojson = layer.toGeoJSON();
         console.log('編輯:', JSON.stringify(geojson));
-    });
 
-    // 在地圖上創建按鈕
-    var fetchDataBtn = createFetchDataButton();
-    document.getElementById('map').appendChild(fetchDataBtn);
+        // 在多邊形旁邊創建按鈕
+        placeButtonNearPolygon(layer);
+    });
 });
