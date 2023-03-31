@@ -46,26 +46,33 @@ var drawControl = new L.Control.Draw({
 }).addTo(map);
 
 
+
 // 在地圖上創建按鈕的函數
-function createFetchDataButton(position) {
+function createFetchDataButton(latLng) {
     var fetchDataBtn = L.DomUtil.create('button', 'fetch-data-btn');
     fetchDataBtn.innerHTML = '獲取資料';
     fetchDataBtn.style.position = 'absolute';
     fetchDataBtn.style.zIndex = 1000;
-    L.DomEvent.on(fetchDataBtn, 'click', function () {
+    fetchDataBtn.onclick = function () {
         // 在這裡向服務器發送請求以獲取資料
         console.log('按鈕已點擊，正在向服務器發送請求...');
+    };
+
+    var fetchDataBtnMarker = L.marker(latLng, {
+        icon: L.divIcon({
+            className: 'fetch-data-btn-marker',
+            html: fetchDataBtn.outerHTML
+        }),
+        zIndexOffset: 1000
     });
-    map.getContainer().appendChild(fetchDataBtn);
-    L.DomEvent.disableClickPropagation(fetchDataBtn);
-    return fetchDataBtn;
+    return fetchDataBtnMarker;
 }
 
 function placeButtonNearPolygon(layer) {
     var bounds = layer.getBounds();
-    var buttonPosition = map.latLngToContainerPoint(bounds.getSouthEast()).add([10, -10]);
-    var fetchDataBtn = createFetchDataButton(buttonPosition);
-    fetchDataBtn.style.transform = `translate(${buttonPosition.x}px, ${buttonPosition.y}px)`;
+    var buttonLatLng = bounds.getSouthEast();
+    var fetchDataBtnMarker = createFetchDataButton(buttonLatLng);
+    fetchDataBtnMarker.addTo(map);
 }
 
 // 處理繪圖完成事件
