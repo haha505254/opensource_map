@@ -301,15 +301,22 @@ function createFetchDataButton(latLng, geojson) {
     // 點擊按鈕時的事件處理器
     fetchDataBtnMarker.on('click', function (e) {
         // 這裡是你要發送 POST 請求的遠端伺服器地址
-        var url = 'https://your-remote-server.com/api/endpoint';
-        console.log(geojson)
+        var url = 'http://125.229.69.223:8881/polygon/insidePolygon/';
+
+        // 將傳入的 geojson 封裝到 FeatureCollection 中
+        var modifiedGeojson = {
+            type: 'FeatureCollection',
+            features: [geojson]
+        };
+
+        // 創建 FormData 並添加 geojson 字段
+        var formData = new FormData();
+        formData.append('geojson', JSON.stringify(modifiedGeojson));
+
         // 發送 POST 請求並處理回應
         fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(geojson)
+            body: formData
         })
             .then(function (response) {
                 if (response.ok) {
@@ -351,6 +358,8 @@ function createFetchDataButton(latLng, geojson) {
 
     return fetchDataBtnMarker;
 }
+
+
 var buttonLayerMap = new Map();
 
 function placeButtonNearPolygon(layer) {
