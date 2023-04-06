@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result Page</title>
+    <script src="https://unpkg.com/vue@next"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,59 +36,133 @@
 </head>
 
 <body>
-    <div id="result-container"></div>
+    <div id="app">
+        <div v-if="error" id="result-container">{{ error }}</div>
+        <template v-else>
+            <div v-for="(item, index) in lkeyData.contains" :key="'contains_' + index">
+                <h3>包含的土地 - {{ item.lkey }}</h3>
+                <table>
+                    <tr>
+                        <th>土地區段</th>
+                        <td>{{ item.region_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>土地面積</th>
+                        <td>{{ item.land_area }} 平方公尺</td>
+                    </tr>
+                    <tr>
+                        <th>用途分區</th>
+                        <td>{{ item.land_zone }}</td>
+                    </tr>
+                    <tr>
+                        <th>土地使用</th>
+                        <td>{{ item.land_purpose }}</td>
+                    </tr>
+                    <tr>
+                        <th>標示地價</th>
+                        <td>NT$ {{ item.land_notice_price }}</td>
+                    </tr>
+                    <tr>
+                        <th>建物數量</th>
+                        <td>{{ item.building_num }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div v-for="(item, index) in lkeyData.intersects" :key="'intersects_' + index">
+                <h3>相交的土地 - {{ item.lkey }}</h3>
+                <table>
+                    <tr>
+                        <th>土地區段</th>
+                        <td>{{ item.region_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>土地面積</th>
+                        <td>{{ item.land_area }} 平方公尺</td>
+                    </tr>
+                    <tr>
+                        <th>土地用途</th>
+                        <td>{{ item.land_purpose }}</td>
+                    </tr>
+                    <tr>
+                        <th>土地分區</th>
+                        <td>{{ item.land_zone }}</td>
+                    </tr>
+                    <tr>
+                        <th>土地型態</th>
+                        <td>{{ item.land_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>公告地價日期</th>
+                        <td>{{ item.land_notice_value_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>公告地價</th>
+                        <td>{{ item.land_notice_price }} 元</td>
+                    </tr>
+                    <tr>
+                        <th>公告地價總值</th>
+                        <td>{{ item.land_notice_value }} 元</td>
+                    </tr>
+                    <tr>
+                        <th>建物數量</th>
+                        <td>{{ item.building_num }}</td>
+                    </tr>
+                    <tr>
+                        <th>所有權人</th>
+                        <td>{{ item.owners }}</td>
+                    </tr>
+                    <tr>
+                        <th>所有權人數</th>
+                        <td>{{ item.owners_num }}</td>
+                    </tr>
+                    <tr>
+                        <th>抵押權人</th>
+                        <td>{{ item.creditors || '無' }}</td>
+                    </tr>
+                    <tr>
+                        <th>抵押權人數</th>
+                        <td>{{ item.creditors_num }}</td>
+                    </tr>
+                    <tr>
+                        <th>所有權類型</th>
+                        <td>{{ item.owner_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>平均單價</th>
+                        <td>{{ item.avg_price.toFixed(2) }} 元</td>
+                    </tr>
+                    <tr>
+                        <th>平均總值</th>
+                        <td>{{ item.avg_value.toFixed(2) }} 元</td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+    </div>
     <script>
-        // 在 res.html 中監聽來自主視窗的 postMessage 事件
-        window.addEventListener('message', function (event) {
-            // event.data 是從主視窗傳遞過來的數據
-            var data = event.data;
-
-            // 檢查是否存在錯誤信息
-            if (data.error) {
-                // 在此處處理錯誤信息，例如將其顯示到頁面上
-                document.getElementById('result-container').innerHTML = data.error;
-            } else {
-                // 在此處處理正常數據，例如將其顯示到頁面上
-                var resultHtml = '';
-
-                data.lkey_data.contains.forEach(function (item) {
-                    resultHtml += '<h3>包含的土地 - ' + item.lkey + '</h3>';
-                    resultHtml += '<table>';
-                    resultHtml += '<tr><th>土地區段</th><td>' + item.region_name + '</td></tr>';
-                    resultHtml += '<tr><th>土地面積</th><td>' + item.land_area + ' 平方公尺</td></tr>';
-                    resultHtml += '<tr><th>用途分區</th><td>' + item.land_zone + '</td></tr>';
-                    resultHtml += '<tr><th>土地使用</th><td>' + item.land_purpose + '</td></tr>';
-                    resultHtml += '<tr><th>標示地價</th><td>NT$' + item.land_notice_price + '</td></tr>';
-                    resultHtml += '<tr><th>建物數量</th><td>' + item.building_num + '</td></tr>';
-                    resultHtml += '</table>';
+        const app = Vue.createApp({
+            data() {
+                return {
+                    lkeyData: {
+                        contains: [],
+                        intersects: []
+                    },
+                    error: null
+                };
+            },
+            created() {
+                window.addEventListener('message', (event) => {
+                    const data = event.data;
+                    if (data.error) {
+                        this.error = data.error;
+                    } else {
+                        this.lkeyData = data.lkey_data;
+                    }
                 });
-
-                data.lkey_data.intersects.forEach(function (item) {
-                    resultHtml += '<h3>相交的土地 - ' + item.lkey + '</h3>';
-                    resultHtml += '<table>';
-                    resultHtml += '<tr><th>土地區段</th><td>' + item.region_name + '</td></tr>';
-                    resultHtml += '<tr><th>土地面積</th><td>' + item.land_area + ' 平方公尺</td>';
-                    resultHtml += '<tr><th>土地用途</th><td>' + item.land_purpose + '</td></tr>';
-                    resultHtml += '<tr><th>土地分區</th><td>' + item.land_zone + '</td></tr>';
-                    resultHtml += '<tr><th>土地型態</th><td>' + item.land_type + '</td></tr>';
-                    resultHtml += '<tr><th>公告地價日期</th><td>' + item.land_notice_value_date + '</td></tr>';
-                    resultHtml += '<tr><th>公告地價</th><td>' + item.land_notice_price + ' 元</td></tr>';
-                    resultHtml += '<tr><th>公告地價總值</th><td>' + item.land_notice_value + ' 元</td></tr>';
-                    resultHtml += '<tr><th>建物數量</th><td>' + item.building_num + '</td></tr>';
-                    resultHtml += '<tr><th>所有權人</th><td>' + item.owners + '</td></tr>';
-                    resultHtml += '<tr><th>所有權人數</th><td>' + item.owners_num + '</td></tr>';
-                    resultHtml += '<tr><th>抵押權人</th><td>' + (item.creditors || '無') + '</td></tr>';
-                    resultHtml += '<tr><th>抵押權人數</th><td>' + item.creditors_num + '</td></tr>';
-                    resultHtml += '<tr><th>所有權類型</th><td>' + item.owner_type + '</td></tr>';
-                    resultHtml += '<tr><th>平均單價</th><td>' + item.avg_price.toFixed(2) + ' 元</td></tr>';
-                    resultHtml += '<tr><th>平均總值</th><td>' + item.avg_value.toFixed(2) + ' 元</td></tr>';
-                    resultHtml += '</table>';
-                });
-
-                //將結果顯示在頁面上
-                document.getElementById('result-container').innerHTML = resultHtml;
             }
         });
+
+        app.mount('#app');
     </script>
 </body>
 

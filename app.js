@@ -301,7 +301,7 @@ function createFetchDataButton(latLng, geojson) {
     // 點擊按鈕時的事件處理器
     fetchDataBtnMarker.on('click', function (e) {
         // 這裡是你要發送 POST 請求的遠端伺服器地址
-        var url = 'http://127.0.0.1:9000/spgateway/jacklintest/';
+        var url = 'https://diablo-test.yeshome.net.tw/spgateway/jacklintest/';
         // var url = 'http://125.229.69.223:8881/polygon/insidePolygon/';
 
         // 將傳入的 geojson 封裝到 FeatureCollection 中
