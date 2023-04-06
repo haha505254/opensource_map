@@ -417,6 +417,8 @@ citySelect.addEventListener('change', function () {
     }
 });
 
+
+
 document.getElementById('district-select').addEventListener('change', function () {
     var city = citySelect.value;
     var district = this.value;
