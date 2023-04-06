@@ -232,7 +232,7 @@ var cityDistrictData = {
 };
 
 // 初始化地圖
-var map = L.map('map').setView([23, 121], 13);
+var map = L.map('map').setView([25.026770, 121.543707], 13);
 L.drawLocal.draw.toolbar.buttons.marker = '定點座標';
 L.drawLocal.draw.toolbar.buttons.polygon = '開始繪製地圖多邊形';
 L.drawLocal.draw.toolbar.buttons.rectangle = '開始繪製長方形';
@@ -483,3 +483,22 @@ document.getElementById('district-select').addEventListener('change', function (
 });
 
 
+function getLocationAndSetMap() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            map.setView([lat, lng], 16); // 將地圖導向到用戶的位置，並將縮放級別設置為13
+        }, function(error) {
+            console.error('無法獲取位置信息：', error);
+        });
+    } else {
+        console.error('瀏覽器不支持地理定位。');
+    }
+}
+
+
+
+window.addEventListener('load', function() {
+    getLocationAndSetMap();
+});
