@@ -268,6 +268,7 @@ var drawnItems = new L.FeatureGroup().addTo(map);
 var drawControl = new L.Control.Draw({
     draw: {
         polyline: false,
+        polygon: true,
         circle: false,
         marker: true,
         circlemarker: false,
@@ -362,18 +363,32 @@ function placeButtonNearPolygon(layer) {
     buttonLayerMap.set(layer, fetchDataBtnMarker);
 }
 
+
+
 // 處理繪圖完成事件
 map.on(L.Draw.Event.CREATED, function (event) {
     var layer = event.layer;
     drawnItems.addLayer(layer);
 
-    // 輸出polygon的geojson
-    var geojson = layer.toGeoJSON();
-    console.log(JSON.stringify(geojson));
+    // 判斷圖層類型是 polygon 還是 marker
+    if (event.layerType === 'polygon') {
+        // 輸出polygon的geojson
+        var geojson = layer.toGeoJSON();
+        console.log(JSON.stringify(geojson));
 
-    // 在多邊形旁邊創建按鈕
-    placeButtonNearPolygon(layer);
+        // 在多邊形旁邊創建按鈕
+        placeButtonNearPolygon(layer);
+    } else if (event.layerType === 'marker') {
+        // 獲取 marker 的座標
+        var latLng = layer.getLatLng();
+        var geojson = layer.toGeoJSON(); // 獲取 geojson
+        var fetchDataBtnMarker = createFetchDataButton(latLng, geojson); // 傳遞 geojson
+        fetchDataBtnMarker.addTo(map);
+        // 將按鈕與圖層之間的對應關係儲存到 Map 物件中
+        buttonLayerMap.set(layer, fetchDataBtnMarker);
+    }
 });
+
 
 map.on(L.Draw.Event.EDITED, function (event) {
     var layers = event.layers;
@@ -385,12 +400,25 @@ map.on(L.Draw.Event.EDITED, function (event) {
             buttonLayerMap.delete(layer);
         }
 
-        // 輸出 Polygon 的 GeoJSON
-        var geojson = layer.toGeoJSON();
-        console.log('編輯:', JSON.stringify(geojson));
+        if (layer instanceof L.Marker) {
+            // 輸出 Marker 的 GeoJSON
+            var geojson = layer.toGeoJSON();
+            console.log('編輯:', JSON.stringify(geojson));
 
-        // 在多邊形旁邊創建按鈕
-        placeButtonNearPolygon(layer);
+            // 獲取 marker 的座標
+            var latLng = layer.getLatLng();
+            var fetchDataBtnMarker = createFetchDataButton(latLng, geojson); // 傳遞 geojson
+            fetchDataBtnMarker.addTo(map);
+            // 將按鈕與圖層之間的對應關係儲存到 Map 物件中
+            buttonLayerMap.set(layer, fetchDataBtnMarker);
+        } else if (layer instanceof L.Polygon) {
+            // 輸出 Polygon 的 GeoJSON
+            var geojson = layer.toGeoJSON();
+            console.log('編輯:', JSON.stringify(geojson));
+
+            // 在多邊形旁邊創建按鈕
+            placeButtonNearPolygon(layer);
+        }
     });
 });
 
