@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Page</title>
+</head>
+<body>
+    <div id="result-container"></div>
+    <script>
+        // 在 res.html 中監聽來自主視窗的 postMessage 事件
+        window.addEventListener('message', function(event) {
+            // event.data 是從主視窗傳遞過來的數據
+            var data = event.data;
+
+            // 檢查是否存在錯誤信息
+            if (data.error) {
+                // 在此處處理錯誤信息，例如將其顯示到頁面上
+                document.getElementById('result-container').innerHTML = data.error;
+            } else {
+                // 在此處處理正常數據，例如將其顯示到頁面上
+                document.getElementById('result-container').innerHTML = JSON.stringify(data, null, 2);
+            }
+        });
+    </script>
+</body>
+</html>

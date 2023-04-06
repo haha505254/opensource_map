@@ -175,7 +175,7 @@ var cityDistrictData = {
         "那瑪夏區": [23.273853, 120.689468],
         "茂林區": [22.898236, 120.728756],
         "茄萣區": [22.906986, 120.196205]
-        },
+    },
 
 
     "基隆市": {
@@ -320,20 +320,36 @@ function createFetchDataButton(latLng, geojson) {
             .then(function (data) {
                 // 在這裡處理返回的數據，並將其顯示在頁面上
                 console.log('獲取到的資料：', data);
-                // 你可以根據需要修改以下代碼以將數據顯示在頁面的指定位置
-                var outputElement = document.getElementById('output');
-                if (outputElement) {
-                    outputElement.innerHTML = JSON.stringify(data, null, 2);
+
+                // 開啟新視窗
+                var newWindow = window.open('res.html', '_blank');
+
+                if (!newWindow) {
+                    alert('無法開啟新視窗，請檢查瀏覽器的彈出窗口設置。');
+                } else {
+                    // 當新視窗載入完成後，使用 postMessage 將數據傳遞給新視窗
+                    newWindow.addEventListener('load', function () {
+                        newWindow.postMessage(data, '*');
+                    });
                 }
             })
             .catch(function (error) {
                 console.error('獲取資料時出現錯誤：', error);
+                var newWindow = window.open('res.html', '_blank');
+
+                if (!newWindow) {
+                    alert('無法開啟新視窗，請檢查瀏覽器的彈出窗口設置。');
+                } else {
+                    // 當新視窗載入完成後，使用 postMessage 將空數據或錯誤信息傳遞給新視窗
+                    newWindow.addEventListener('load', function () {
+                        newWindow.postMessage({ error: '獲取資料時出現錯誤' }, '*');
+                    });
+                }
             });
     });
 
     return fetchDataBtnMarker;
 }
-
 var buttonLayerMap = new Map();
 
 function placeButtonNearPolygon(layer) {
