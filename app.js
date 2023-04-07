@@ -466,74 +466,74 @@ var baseLayers = {
 var overlayLayers = {
 
     "村里界": L.tileLayer('https://wmts.nlsc.gov.tw/wmts/Village/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '村里界'
     }),
     "地段外圍圖(段籍圖)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LANDSECT/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '地段外圍圖(段籍圖)'
     }),
     "國土利用現況調查110年更新區":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LUIMAP110/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '國土利用現況調查110年更新區'
     }),
     "地段外圍圖(段籍圖)(類別)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LANDSECT2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '地段外圍圖(段籍圖)(類別)'
     }),
     "國土利用現況調查-3類交通":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LUIMAP03/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '國土利用現況調查-3類交通'
     }),
     "國土利用現況調查-1類農業":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LUIMAP01/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '國土利用現況調查-1類農業'
     }),
     "公有土地地籍圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LAND_OPENDATA/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '公有土地地籍圖'
     }),
     "非都市土地使用地類別圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '非都市土地使用地類別圖'
     }),
     "非都市土地使用分區圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN1/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '非都市土地使用分區圖'
     }),
     "1/5000像片基本圖111":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/TOPO05KPHOTO_111/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '1/5000像片基本圖111'
     }),
     "1/100000地形圖111":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/TOPO10M_111/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '1/100000地形圖111'
     }),
     "110年正射影像圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/PHOTO2021/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '110年正射影像圖'
     }),
 
     "土壤液化潛勢_中級":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/SoilLiquefaction2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '土壤液化潛勢_中級'
     }),
     "正射影像(混合)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/PHOTO_MIX/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '正射影像(混合)'
     }),
     "道路路網":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/ROAD/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '道路路網'
     }),
 
     "地質敏感區":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/GeoSensitive/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '地質敏感區'
     }),
 
     "正射影像圖(通用)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/PHOTO2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
-        maxZoom: 18,
+        maxZoom: 19,
         id: '正射影像圖(通用)'
     }),
 
