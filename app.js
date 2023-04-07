@@ -232,7 +232,9 @@ var cityDistrictData = {
 };
 
 // 初始化地圖
-var map = L.map('map').setView([25.026770, 121.543707], 13);
+var map = L.map('map', {
+    maxZoom: 19 // 設定最大縮放級別
+}).setView([25.026770, 121.543707], 13);
 L.drawLocal.draw.toolbar.buttons.marker = '定點座標';
 L.drawLocal.draw.toolbar.buttons.polygon = '開始繪製地圖多邊形';
 L.drawLocal.draw.toolbar.buttons.rectangle = '開始繪製長方形';
@@ -260,7 +262,8 @@ L.drawLocal.edit.handlers.remove.tooltip.text = '於圖層上點擊即可移除'
 
 // 添加地圖圖層
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19 // 設定最大縮放級別
 }).addTo(map);
 
 // 初始化繪圖工具
