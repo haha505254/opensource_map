@@ -444,11 +444,114 @@ L.drawLocal.edit.handlers.edit.tooltip.subtext = '點擊左側取消變更即可
 L.drawLocal.edit.handlers.edit.tooltip.text = '拖曳圖層節點即可編輯圖層';
 L.drawLocal.edit.handlers.remove.tooltip.text = '於圖層上點擊即可移除';
 
-// 添加地圖圖層
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19 // 設定最大縮放級別
-}).addTo(map);
+// 基本圖層
+var baseLayers = {
+
+    "TaiwanMap": L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 19,
+        id: 'TaiwanMap'
+    }),
+    "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }),
+
+    
+};
+
+
+
+
+// 疊加圖層
+var overlayLayers = {
+
+    "村里界": L.tileLayer('https://wmts.nlsc.gov.tw/wmts/Village/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '村里界'
+    }),
+    "地段外圍圖(段籍圖)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LANDSECT/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '地段外圍圖(段籍圖)'
+    }),
+    "國土利用現況調查110年更新區":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LUIMAP110/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '國土利用現況調查110年更新區'
+    }),
+    "地段外圍圖(段籍圖)(類別)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LANDSECT2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '地段外圍圖(段籍圖)(類別)'
+    }),
+    "國土利用現況調查-3類交通":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LUIMAP03/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '國土利用現況調查-3類交通'
+    }),
+    "國土利用現況調查-1類農業":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LUIMAP01/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '國土利用現況調查-1類農業'
+    }),
+    "公有土地地籍圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/LAND_OPENDATA/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '公有土地地籍圖'
+    }),
+    "非都市土地使用地類別圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '非都市土地使用地類別圖'
+    }),
+    "非都市土地使用分區圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN1/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '非都市土地使用分區圖'
+    }),
+    "1/5000像片基本圖111":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/TOPO05KPHOTO_111/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '1/5000像片基本圖111'
+    }),
+    "1/100000地形圖111":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/TOPO10M_111/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '1/100000地形圖111'
+    }),
+    "110年正射影像圖":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/PHOTO2021/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '110年正射影像圖'
+    }),
+
+    "土壤液化潛勢_中級":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/SoilLiquefaction2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '土壤液化潛勢_中級'
+    }),
+    "正射影像(混合)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/PHOTO_MIX/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '正射影像(混合)'
+    }),
+    "道路路網":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/ROAD/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '道路路網'
+    }),
+
+    "地質敏感區":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/GeoSensitive/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '地質敏感區'
+    }),
+
+    "正射影像圖(通用)":  L.tileLayer('https://wmts.nlsc.gov.tw/wmts/PHOTO2/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+        maxZoom: 18,
+        id: '正射影像圖(通用)'
+    }),
+
+
+};
+
+// 將預設基本圖層添加到地圖
+baseLayers.TaiwanMap.addTo(map);
+
+// 將預設疊加圖層添加到地圖
+// overlayLayers.GeoSensitive.addTo(map);
+// overlayLayers.Village.addTo(map);
+// overlayLayers.Landsect.addTo(map);
+
+// 創建圖層控制器並添加到地圖
+L.control.layers(baseLayers, overlayLayers).addTo(map);
+
+
 
 // 初始化繪圖工具
 var drawnItems = new L.FeatureGroup().addTo(map);
