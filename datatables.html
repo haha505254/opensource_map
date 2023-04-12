@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataTables 示例</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>DataTables 示例</h2>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="checkAll"></th>
+                    <th>選擇</th>
+                    <th>名稱</th>
+                    <th>位置</th>
+                    <th>年齡</th>
+                    <th>開始日期</th>
+                    <th>薪資</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>張三</td>
+                    <td>經理</td>
+                    <td>30</td>
+                    <td>2020/01/01</td>
+                    <td>$3000</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>李四</td>
+                    <td>開發人員</td>
+                    <td>25</td>
+                    <td>2019/06/15</td>
+                    <td>$2500</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>王五</td>
+                    <td>設計師</td>
+                    <td>28</td>
+                    <td>2018/11/12</td>
+                    <td>$2700</td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="submitBtn" class="btn btn-primary">發送選中數據</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            const table = $('#example').DataTable({
+                // ajax: 'YOUR_DATA_SOURCE', // 換成你的數據源，例如："data.json"
+                columns: [
+                    {
+                        data: null,
+                        defaultContent: '<input type="checkbox" class="select-row">',
+                        orderable: false
+                    },
+                    { data: 'name' },
+                    { data: 'position' },
+                    { data: 'age' },
+                    { data: 'start_date' },
+                    { data: 'salary' }
+                ],
+                order: [[1, 'asc']]
+            });
+            // 全選複選框的事件監聽器
+            $('#checkAll').on('click', function () {
+                const isChecked = $(this).is(':checked');
+                table.$('input[type="checkbox"].select-row').prop('checked', isChecked);
+            });
+
+            // 單個複選框的事件監聽器
+            table.on('change', 'input[type="checkbox"].select-row', function () {
+                if (!$(this).is(':checked')) {
+                    $('#checkAll').prop('checked', false);
+                } else if (table.$('input[type="checkbox"].select-row:checked').length === table.rows().count()) {
+                    $('#checkAll').prop('checked', true);
+                }
+            });
+
+
+
+            $('#submitBtn').on('click', function () {
+                const selectedRows = [];
+                table.$('input[type="checkbox"].select-row:checked').each(function () {
+                    selectedRows.push(table.row($(this).closest('tr')).data());
+                });
+
+                // 在這裡發送選中的數據到後台
+                console.log(selectedRows);
+
+                $.ajax({
+                    url: 'YOUR_BACKEND_URL', // 換成你的後端接口 URL
+                    method: 'POST',
+                    data: {
+                        selectedRows: JSON.stringify(selectedRows)
+                    },
+                    success: function (response) {
+                        // 處理後台返回的數據
+                        console.log(response);
+                    },
+                    error: function (error) {
+                        // 處理錯誤
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
